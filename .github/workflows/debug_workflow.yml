@@ -1,0 +1,42 @@
+name: Debug Terraform Secrets
+
+on:
+  workflow_dispatch:
+
+jobs:
+  debug:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Debug Terraform Secret
+        run: |
+          if [ -z "${{ secrets.TERRAFORM }}" ]; then
+            echo "❌ ERROR: TERRAFORM Secret is empty!"
+            exit 1
+          else
+            echo "✅ TERRAFORM Secret exists!"
+          fi
+          
+          echo "Terraform Secret Length: $(echo '${{ secrets.TERRAFORM }}' | wc -c)"
+          echo "First 100 characters:"
+          echo '${{ secrets.TERRAFORM }}' | cut -c1-100
+
+      - name: Write Terraform Code to File
+        run: |
+          echo "📝 Writing Terraform code to main.tf..."
+          echo "${{ secrets.TERRAFORM }}" | sed 's/\\n/\n/g' > main.tf
+          echo "✅ File main.tf has been created."
+
+      - name: Verify File Contents
+        run: |
+          echo "🔍 Checking main.tf..."
+          ls -lah main.tf
+          echo "📖 First 20 lines of main.tf:"
+          head -n 20 main.tf
+
+      - name: Validate Terraform Syntax
+        run: |
+          echo "🔍 Running t
