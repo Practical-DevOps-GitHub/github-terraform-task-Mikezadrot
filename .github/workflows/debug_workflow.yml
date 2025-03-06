@@ -13,13 +13,6 @@ jobs:
 
       - name: Debug Terraform Secret
         run: |
-          if [ -z "${{ secrets.TERRAFORM }}" ]; then
-            echo "❌ ERROR: TERRAFORM Secret is empty!"
-            exit 1
-          else
-            echo "✅ TERRAFORM Secret exists!"
-          fi
-          
           echo "Terraform Secret Length: $(echo '${{ secrets.TERRAFORM }}' | wc -c)"
           echo "First 100 characters:"
           echo '${{ secrets.TERRAFORM }}' | cut -c1-100
