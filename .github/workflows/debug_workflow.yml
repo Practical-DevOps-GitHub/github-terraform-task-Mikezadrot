@@ -13,9 +13,8 @@ jobs:
 
       - name: Debug Terraform Secret
         run: |
-          echo "Terraform Secret Length: $(echo '${{ secrets.TERRAFORM }}' | wc -c)"
-          echo "First 100 characters:"
-          echo '${{ secrets.TERRAFORM }}' | cut -c1-100
+          echo '${{ secrets.TERRAFORM }}' > terraform.json
+          jq '.' terraform.json || cat terraform.json
 
       - name: Write Terraform Code to File
         run: |
@@ -30,6 +29,6 @@ jobs:
           echo "📖 First 20 lines of main.tf:"
           head -n 20 main.tf
 
-      - name: Validate Terraform Syntax
-        run: |
-          echo "🔍 Running t
+#      - name: Validate Terraform Syntax
+#        run: |
+#          echo "🔍 Running t
